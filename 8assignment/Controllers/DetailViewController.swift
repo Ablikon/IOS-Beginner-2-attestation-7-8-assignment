@@ -1,8 +1,7 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-    
-    // MARK: - Properties
+
     var favoriteItem: FavoriteItem?
     var categoryColor: UIColor = .systemBlue
     

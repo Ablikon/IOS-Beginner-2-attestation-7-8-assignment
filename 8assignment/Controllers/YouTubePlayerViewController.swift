@@ -2,7 +2,6 @@ import UIKit
 
 class YouTubePlayerViewController: UIViewController {
     
-    // MARK: - Properties
     var videoID: String?
     var videoTitle: String?
     
@@ -67,7 +66,6 @@ class YouTubePlayerViewController: UIViewController {
         loadThumbnail()
     }
     
-    // MARK: - Setup
     private func setupUI() {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         
@@ -130,7 +128,6 @@ class YouTubePlayerViewController: UIViewController {
         }.resume()
     }
     
-    // MARK: - Actions
     @objc private func closeButtonTapped() {
         dismiss(animated: true)
     }
