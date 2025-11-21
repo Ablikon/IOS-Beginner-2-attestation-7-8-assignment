@@ -7,13 +7,12 @@
 
 import UIKit
 
+// This file is kept for compatibility but functionality moved to separate controllers
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        // Intentionally empty - using tab-based navigation
     }
-
-
 }
 
