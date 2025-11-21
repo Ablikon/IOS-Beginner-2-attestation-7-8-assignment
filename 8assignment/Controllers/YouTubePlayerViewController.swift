@@ -42,21 +42,10 @@ class YouTubePlayerViewController: UIViewController {
         return label
     }()
     
-    private let youtubeButton: UIButton = {
+    private let watchButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .systemRed
-        button.setTitle("🎬 Open in YouTube App", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
-        button.layer.cornerRadius = 25
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    private let safariButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.backgroundColor = .systemBlue
-        button.setTitle("🌐 Open in Safari", for: .normal)
+        button.setTitle("🎬 Watch on YouTube", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
         button.layer.cornerRadius = 25
@@ -87,14 +76,12 @@ class YouTubePlayerViewController: UIViewController {
         containerView.addSubview(thumbnailImageView)
         containerView.addSubview(playIconView)
         containerView.addSubview(titleLabel)
-        containerView.addSubview(youtubeButton)
-        containerView.addSubview(safariButton)
+        containerView.addSubview(watchButton)
         
         titleLabel.text = videoTitle
         
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        youtubeButton.addTarget(self, action: #selector(openInYouTube), for: .touchUpInside)
-        safariButton.addTarget(self, action: #selector(openInSafari), for: .touchUpInside)
+        watchButton.addTarget(self, action: #selector(openInSafari), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -120,16 +107,11 @@ class YouTubePlayerViewController: UIViewController {
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             
-            youtubeButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            youtubeButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            youtubeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            youtubeButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            safariButton.topAnchor.constraint(equalTo: youtubeButton.bottomAnchor, constant: 12),
-            safariButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            safariButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            safariButton.heightAnchor.constraint(equalToConstant: 50),
-            safariButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -30)
+            watchButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            watchButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            watchButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            watchButton.heightAnchor.constraint(equalToConstant: 50),
+            watchButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -30)
         ])
     }
     
@@ -153,23 +135,6 @@ class YouTubePlayerViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    @objc private func openInYouTube() {
-        guard let videoID = videoID else { return }
-        
-        if let youtubeAppURL = URL(string: "youtube://\(videoID)"),
-           UIApplication.shared.canOpenURL(youtubeAppURL) {
-            UIApplication.shared.open(youtubeAppURL) { [weak self] success in
-                if success {
-                    self?.dismiss(animated: true)
-                } else {
-                    self?.showYouTubeNotInstalledAlert()
-                }
-            }
-        } else {
-            showYouTubeNotInstalledAlert()
-        }
-    }
-    
     @objc private func openInSafari() {
         guard let videoID = videoID else { return }
         
@@ -178,21 +143,5 @@ class YouTubePlayerViewController: UIViewController {
                 self?.dismiss(animated: true)
             }
         }
-    }
-    
-    private func showYouTubeNotInstalledAlert() {
-        let alert = UIAlertController(
-            title: "YouTube App Not Found",
-            message: "YouTube app is not installed. Would you like to open in Safari?",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "Open in Safari", style: .default) { [weak self] _ in
-            self?.openInSafari()
-        })
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
-        present(alert, animated: true)
     }
 }
