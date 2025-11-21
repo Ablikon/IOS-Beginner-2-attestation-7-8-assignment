@@ -2,7 +2,6 @@ import UIKit
 
 class FavoritesViewController: UIViewController {
     
-    // MARK: - Properties
     var category: FavoriteCategory = .movies
     private var favorites: [FavoriteItem] = []
     
@@ -17,19 +16,16 @@ class FavoritesViewController: UIViewController {
         return table
     }()
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         loadData()
     }
     
-    // MARK: - Setup
     private func setupUI() {
         title = category.title
         view.backgroundColor = .systemGroupedBackground
-        
-        // Configure navigation bar
+  
         navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(tableView)
@@ -50,7 +46,6 @@ class FavoritesViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDataSource
 extension FavoritesViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -69,7 +64,6 @@ extension FavoritesViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - UITableViewDelegate
 extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailViewController()

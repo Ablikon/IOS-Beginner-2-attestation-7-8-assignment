@@ -84,6 +84,21 @@ class DetailViewController: UIViewController {
         return label
     }()
     
+    private let playButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .systemRed
+        button.setTitle("▶ Watch Trailer / Listen", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        button.layer.cornerRadius = 25
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 4)
+        button.layer.shadowRadius = 8
+        button.layer.shadowOpacity = 0.3
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let divider: UIView = {
         let view = UIView()
         view.backgroundColor = .separator
@@ -125,14 +140,13 @@ class DetailViewController: UIViewController {
         return label
     }()
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         configureWithItem()
     }
     
-    // MARK: - Setup
+
     private func setupUI() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = false
@@ -147,6 +161,7 @@ class DetailViewController: UIViewController {
         infoContainerView.addSubview(titleLabel)
         infoContainerView.addSubview(subtitleLabel)
         infoContainerView.addSubview(ratingStackView)
+        infoContainerView.addSubview(playButton)
         infoContainerView.addSubview(divider)
         infoContainerView.addSubview(descriptionTitleLabel)
         infoContainerView.addSubview(descriptionLabel)
@@ -155,6 +170,8 @@ class DetailViewController: UIViewController {
         
         ratingStackView.addArrangedSubview(starContainerView)
         ratingStackView.addArrangedSubview(ratingLabel)
+        
+        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
         
         setupGradient()
         
@@ -196,7 +213,12 @@ class DetailViewController: UIViewController {
             ratingStackView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 12),
             ratingStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             
-            divider.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 20),
+            playButton.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 20),
+            playButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            playButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            playButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            divider.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 20),
             divider.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             divider.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             divider.heightAnchor.constraint(equalToConstant: 1),
@@ -235,7 +257,7 @@ class DetailViewController: UIViewController {
     private func configureWithItem() {
         guard let item = favoriteItem else { return }
         
-        // Load image
+
         loadImage(from: item.imageURL)
         
         titleLabel.text = item.title
@@ -244,7 +266,10 @@ class DetailViewController: UIViewController {
         reviewLabel.text = item.review
         ratingLabel.text = String(format: "%.1f / 5.0", item.rating)
         
-        // Create stars
+   
+        playButton.isHidden = !item.hasVideo
+        
+
         let fullStars = Int(item.rating)
         for i in 0..<5 {
             let starImage = UIImageView()
@@ -267,5 +292,18 @@ class DetailViewController: UIViewController {
                 self?.itemImageView.image = image
             }
         }.resume()
+    }
+    
+    @objc private func playButtonTapped() {
+        guard let item = favoriteItem,
+              let videoID = item.youtubeVideoID else { return }
+        
+        let playerVC = YouTubePlayerViewController()
+        playerVC.videoID = videoID
+        playerVC.videoTitle = item.title
+        playerVC.modalPresentationStyle = .fullScreen
+        playerVC.modalTransitionStyle = .crossDissolve
+        
+        present(playerVC, animated: true)
     }
 }

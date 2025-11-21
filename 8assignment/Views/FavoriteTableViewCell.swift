@@ -3,7 +3,6 @@ import UIKit
 class FavoriteTableViewCell: UITableViewCell {
     static let identifier = "FavoriteTableViewCell"
     
-    // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .secondarySystemBackground
@@ -75,7 +74,6 @@ class FavoriteTableViewCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -85,7 +83,6 @@ class FavoriteTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Setup
     private func setupUI() {
         backgroundColor = .clear
         selectionStyle = .none
@@ -101,68 +98,56 @@ class FavoriteTableViewCell: UITableViewCell {
         ratingContainerView.addSubview(ratingLabel)
         
         NSLayoutConstraint.activate([
-            // Container constraints
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
-            // Image constraints
             itemImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
             itemImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
             itemImageView.widthAnchor.constraint(equalToConstant: 70),
             itemImageView.heightAnchor.constraint(equalToConstant: 70),
             
-            // Title constraints
             titleLabel.leadingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
-            
-            // Subtitle constraints
+
             subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             subtitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             
-            // Rating container constraints
             ratingContainerView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             ratingContainerView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 6),
             ratingContainerView.heightAnchor.constraint(equalToConstant: 16),
             
-            // Star constraints
             starImageView.leadingAnchor.constraint(equalTo: ratingContainerView.leadingAnchor),
             starImageView.centerYAnchor.constraint(equalTo: ratingContainerView.centerYAnchor),
             starImageView.widthAnchor.constraint(equalToConstant: 14),
             starImageView.heightAnchor.constraint(equalToConstant: 14),
             
-            // Rating label constraints
             ratingLabel.leadingAnchor.constraint(equalTo: starImageView.trailingAnchor, constant: 4),
             ratingLabel.centerYAnchor.constraint(equalTo: ratingContainerView.centerYAnchor),
             ratingLabel.trailingAnchor.constraint(equalTo: ratingContainerView.trailingAnchor),
             
-            // Review constraints
             reviewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             reviewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             reviewLabel.topAnchor.constraint(equalTo: ratingContainerView.bottomAnchor, constant: 8),
             reviewLabel.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -12),
             
-            // Ensure image doesn't get cut off
             itemImageView.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -12)
         ])
-        
-        // Set content compression priorities
+     
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         subtitleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         reviewLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
     }
     
-    // MARK: - Configuration
     func configure(with item: FavoriteItem) {
         titleLabel.text = item.title
         subtitleLabel.text = "\(item.subtitle) • \(item.year)"
         reviewLabel.text = item.review
         ratingLabel.text = String(format: "%.1f", item.rating)
         
-        // Load image from URL
         loadImage(from: item.imageURL)
     }
     

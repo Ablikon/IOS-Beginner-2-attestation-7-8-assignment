@@ -4,13 +4,18 @@ struct FavoriteItem {
     let title: String
     let subtitle: String
     let review: String
-    let imageURL: String // Unsplash URL
+    let imageURL: String 
     let description: String
     let rating: Double
     let year: String
+    let youtubeVideoID: String? 
     
     var placeholderImage: UIImage? {
         return UIImage(systemName: "photo.fill")
+    }
+    
+    var hasVideo: Bool {
+        return youtubeVideoID != nil
     }
 }
 
